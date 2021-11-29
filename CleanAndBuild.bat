@@ -4,11 +4,12 @@ REM - This batch file will clean and build the editor and game code for your Unr
 
 REM - Replace MyAwesomeGame with the name of your project here!!!
 set PROJECT_NAME=MyAwesomeGame
+set PROJECT_PATH=%USERPROFILE%\Documents\Unreal Projects
 
-if exist "%USERPROFILE%\Documents\Unreal Projects\%PROJECT_NAME%\%PROJECT_NAME%.uproject" goto Continue
+if exist "%PROJECT_PATH%\%PROJECT_NAME%\%PROJECT_NAME%.uproject" goto Continue
 
 echo.
-echo Warning - %USERPROFILE%\Documents\Unreal Projects\%PROJECT_NAME%\%PROJECT_NAME%.uproject does not exist!
+echo Warning - %PROJECT_PATH%\%PROJECT_NAME%\%PROJECT_NAME%.uproject does not exist!
 echo (edit this batch file in a text editor and set PROJECT_NAME to the name of your project)
 echo.
 
@@ -35,33 +36,33 @@ if exist "Engine\Build\InstalledBuild.txt" (
 
 REM - Check if a .sln file exists for the project, if so, then it is a C++ project and you can clean and build the game editor and game.
 REM - (otherwise it's a Blueprint project).
-if exist "%USERPROFILE%\Documents\Unreal Projects\%PROJECT_NAME%\%PROJECT_NAME%.sln" (
+if exist "%PROJECT_PATH%\%PROJECT_NAME%\%PROJECT_NAME%.sln" (
     echo.
     echo %date% %time% Cleaning Game Editor...
     echo.
 
-    call Engine\Build\BatchFiles\Clean.bat -Target="%PROJECT_NAME%Editor Win64 Development" -Project="%USERPROFILE%\Documents\Unreal Projects\%PROJECT_NAME%\%PROJECT_NAME%.uproject" -WaitMutex -FromMSBuild
+    call Engine\Build\BatchFiles\Clean.bat -Target="%PROJECT_NAME%Editor Win64 Development" -Project="%PROJECT_PATH%\%PROJECT_NAME%\%PROJECT_NAME%.uproject" -WaitMutex -FromMSBuild
     if errorlevel 1 goto Error_CleanFailed
 
     echo.
     echo %date% %time% Building Game Editor...
     echo.
 
-    call Engine\Build\BatchFiles\RunUAT.bat BuildEditor -Project="%USERPROFILE%\Documents\Unreal Projects\%PROJECT_NAME%\%PROJECT_NAME%.uproject" -notools
+    call Engine\Build\BatchFiles\RunUAT.bat BuildEditor -Project="%PROJECT_PATH%\%PROJECT_NAME%\%PROJECT_NAME%.uproject" -notools
     if errorlevel 1 goto Error_BuildEditorFailed
 
     echo.
     echo %date% %time% Cleaning Game...
     echo.
 
-    call Engine\Build\BatchFiles\Clean.bat -Target="%PROJECT_NAME% Win64 Development" -Target="%PROJECT_NAME% Win64 Shipping" -Target="%PROJECT_NAME% Win64 DebugGame" -Project="%USERPROFILE%\Documents\Unreal Projects\%PROJECT_NAME%\%PROJECT_NAME%.uproject" -WaitMutex -FromMSBuild
+    call Engine\Build\BatchFiles\Clean.bat -Target="%PROJECT_NAME% Win64 Development" -Target="%PROJECT_NAME% Win64 Shipping" -Target="%PROJECT_NAME% Win64 DebugGame" -Project="%PROJECT_PATH%\%PROJECT_NAME%\%PROJECT_NAME%.uproject" -WaitMutex -FromMSBuild
     if errorlevel 1 goto Error_CleanFailed
 
     echo.
     echo %date% %time% Building Game...
     echo.
 
-    call Engine\Build\BatchFiles\RunUAT.bat BuildGame -project="%USERPROFILE%\Documents\Unreal Projects\%PROJECT_NAME%\%PROJECT_NAME%.uproject" -platform=Win64 -notools -configuration=Development+Shipping+DebugGame
+    call Engine\Build\BatchFiles\RunUAT.bat BuildGame -project="%PROJECT_PATH%\%PROJECT_NAME%\%PROJECT_NAME%.uproject" -platform=Win64 -notools -configuration=Development+Shipping+DebugGame
     if errorlevel 1 goto Error_BuildGameFailed
 ) else (
     echo.
@@ -121,19 +122,19 @@ if errorlevel 1 goto Error_CleanFailed
 
 REM - Check if a .sln file exists for the project, if so, then it is a C++ project and you can clean the game editor and game.
 REM - (otherwise it's a Blueprint project).
-if exist "%USERPROFILE%\Documents\Unreal Projects\%PROJECT_NAME%\%PROJECT_NAME%.sln" (
+if exist "%PROJECT_PATH%\%PROJECT_NAME%\%PROJECT_NAME%.sln" (
     echo.
     echo %date% %time% Cleaning Game Editor...
     echo.
 
-    call Engine\Build\BatchFiles\Clean.bat -Target="%PROJECT_NAME%Editor Win64 Development" -Project="%USERPROFILE%\Documents\Unreal Projects\%PROJECT_NAME%\%PROJECT_NAME%.uproject" -WaitMutex -FromMSBuild
+    call Engine\Build\BatchFiles\Clean.bat -Target="%PROJECT_NAME%Editor Win64 Development" -Project="%PROJECT_PATH%\%PROJECT_NAME%\%PROJECT_NAME%.uproject" -WaitMutex -FromMSBuild
     if errorlevel 1 goto Error_CleanFailed
 
     echo.
     echo %date% %time% Cleaning Game...
     echo.
 
-    call Engine\Build\BatchFiles\Clean.bat -Target="%PROJECT_NAME% Win64 Development" -Target="%PROJECT_NAME% Win64 Shipping" -Target="%PROJECT_NAME% Win64 DebugGame" -Project="%USERPROFILE%\Documents\Unreal Projects\%PROJECT_NAME%\%PROJECT_NAME%.uproject" -WaitMutex -FromMSBuild
+    call Engine\Build\BatchFiles\Clean.bat -Target="%PROJECT_NAME% Win64 Development" -Target="%PROJECT_NAME% Win64 Shipping" -Target="%PROJECT_NAME% Win64 DebugGame" -Project="%PROJECT_PATH%\%PROJECT_NAME%\%PROJECT_NAME%.uproject" -WaitMutex -FromMSBuild
     if errorlevel 1 goto Error_CleanFailed
 )
 
@@ -165,19 +166,19 @@ call Engine\Build\BatchFiles\RunUAT.bat BuildGame -platform=Win64 -configuration
 if errorlevel 1 goto Error_BuildGameFailed
 
 REM - Check if a .sln file exists for the project, if so, then it is a C++ project and you can build the game editor (otherwise it's a Blueprint project).
-if exist "%USERPROFILE%\Documents\Unreal Projects\%PROJECT_NAME%\%PROJECT_NAME%.sln" (
+if exist "%PROJECT_PATH%\%PROJECT_NAME%\%PROJECT_NAME%.sln" (
     echo.
     echo %date% %time% Building Game Editor...
     echo.
 
-    call Engine\Build\BatchFiles\RunUAT.bat BuildEditor -Project="%USERPROFILE%\Documents\Unreal Projects\%PROJECT_NAME%\%PROJECT_NAME%.uproject" -notools
+    call Engine\Build\BatchFiles\RunUAT.bat BuildEditor -Project="%PROJECT_PATH%\%PROJECT_NAME%\%PROJECT_NAME%.uproject" -notools
     if errorlevel 1 goto Error_BuildEditorFailed
 
     echo.
     echo %date% %time% Building Game...
     echo.
 
-    call Engine\Build\BatchFiles\RunUAT.bat BuildGame -project="%USERPROFILE%\Documents\Unreal Projects\%PROJECT_NAME%\%PROJECT_NAME%.uproject" -platform=Win64 -notools -configuration=Development+Shipping+DebugGame
+    call Engine\Build\BatchFiles\RunUAT.bat BuildGame -project="%PROJECT_PATH%\%PROJECT_NAME%\%PROJECT_NAME%.uproject" -platform=Win64 -notools -configuration=Development+Shipping+DebugGame
     if errorlevel 1 goto Error_BuildGameFailed
 )
 
