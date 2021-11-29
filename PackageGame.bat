@@ -5,14 +5,15 @@ REM - This batch file will package (build, cook, and stage) your Unreal Engine p
 
 REM - Replace MyAwesomeGame with the name of your project here!!!
 set PROJECT_NAME=MyAwesomeGame
+set PROJECT_PATH=%USERPROFILE%\Documents\Unreal Projects
 
 REM - Set MAPS to the list of maps you want to cook, for example "MainMenuMap+FirstLevel+SecondLevel+TestMap" (DO NOT PUT SPACES ANYWHERE HERE!!!)
-set MAPS=
+set MAPS=FirstPersonExampleMap
 
-if exist "%USERPROFILE%\Documents\Unreal Projects\%PROJECT_NAME%\%PROJECT_NAME%.uproject" goto Continue
+if exist "%PROJECT_PATH%\%PROJECT_NAME%\%PROJECT_NAME%.uproject" goto Continue
 
 echo.
-echo Warning - %USERPROFILE%\Documents\Unreal Projects\%PROJECT_NAME%\%PROJECT_NAME%.uproject does not exist!
+echo Warning - %PROJECT_PATH%\%PROJECT_NAME%\%PROJECT_NAME%.uproject does not exist!
 echo (edit this batch file in a text editor and set PROJECT_NAME to the name of your project)
 echo.
 
@@ -43,19 +44,19 @@ if exist "Engine\Build\InstalledBuild.txt" (
 )
 
 REM - Check if a .sln file exists for the project, if so, then it is a C++ project and you can build the game editor (otherwise it's a Blueprint project).
-if exist "%USERPROFILE%\Documents\Unreal Projects\%PROJECT_NAME%\%PROJECT_NAME%.sln" (
+if exist "%PROJECT_PATH%\%PROJECT_NAME%\%PROJECT_NAME%.sln" (
     echo.
     echo %date% %time% Building Game Editor...
     echo.
 
-    call Engine\Build\BatchFiles\RunUAT.bat BuildEditor -Project="%USERPROFILE%\Documents\Unreal Projects\%PROJECT_NAME%\%PROJECT_NAME%.uproject" -notools
+    call Engine\Build\BatchFiles\RunUAT.bat BuildEditor -Project="%PROJECT_PATH%\%PROJECT_NAME%\%PROJECT_NAME%.uproject" -notools
     if errorlevel 1 goto Error_BuildEditorFailed
 
     echo.
     echo %date% %time% Building Game...
     echo.
 
-    call Engine\Build\BatchFiles\RunUAT.bat BuildGame -project="%USERPROFILE%\Documents\Unreal Projects\%PROJECT_NAME%\%PROJECT_NAME%.uproject" -platform=Win64 -notools -configuration=Development+Shipping+DebugGame
+    call Engine\Build\BatchFiles\RunUAT.bat BuildGame -project="%PROJECT_PATH%\%PROJECT_NAME%\%PROJECT_NAME%.uproject" -platform=Win64 -notools -configuration=Development+Shipping+DebugGame
     if errorlevel 1 goto Error_BuildGameFailed
 )
 
@@ -69,7 +70,7 @@ REM - Note: When you are ready to ship your game, add "-nodebuginfo" to prevent 
 REM - Note: Using "-createreleaseversion" allows you to create Patches and DLC later for your game if you wish.
 REM - Note: You can use "-compressed" if you want to compress packages (this will make files smaller, but may take longer to load in game).
 
-call Engine\Build\BatchFiles\RunUAT.bat BuildCookRun -project="%USERPROFILE%/Documents/Unreal Projects/%PROJECT_NAME%/%PROJECT_NAME%.uproject" %INSTALLED% -platform=Win64 -configuration=Development+Shipping+DebugGame -map=%MAPS% -nocompileeditor -unattended -utf8output -clean -build -cook -stage -pak -prereqs -package -archive -archivedirectory="%USERPROFILE%\Documents\Unreal Projects\%PROJECT_NAME%\/PackagedGame" -createreleaseversion=1.0
+call Engine\Build\BatchFiles\RunUAT.bat BuildCookRun -project="%PROJECT_PATH%/%PROJECT_NAME%/%PROJECT_NAME%.uproject" %INSTALLED% -platform=Win64 -configuration=Development+Shipping+DebugGame -map=%MAPS% -nocompileeditor -unattended -utf8output -clean -build -cook -stage -pak -prereqs -package -archive -archivedirectory="%PROJECT_PATH%\%PROJECT_NAME%\/PackagedGame" -createreleaseversion=1.0
 if errorlevel 1 goto Error_PackagingFailed
 
 echo.
